@@ -1,0 +1,49 @@
+/* Тёмная тема — простая адаптивная стилизация */
+:root{--bg:#0b0f14;--surface:#0f1724;--card:#0d1624;--accent:#06b6d4;--muted:#94a3b8;--glass:rgba(255,255,255,0.03)}
+*{box-sizing:border-box}
+body{font-family:Segoe UI, Roboto, Arial, sans-serif;background:var(--bg);color:#e6eef6;margin:0}
+.container{max-width:960px;margin:0 auto;padding:20px}
+.site-header{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-bottom:1px solid rgba(255,255,255,0.04);padding:18px 0;color:#fff}
+.header-inner{display:flex;align-items:center;gap:16px}
+.logo{height:48px}
+.title-wrap h1{margin:0;font-size:24px}
+.tagline{margin:6px 0 0;color:var(--muted);font-size:14px}
+.downloads h2{margin-top:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:12px}
+.grid.single{justify-items:center}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:18px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+.card h3{margin:0 0 6px}
+.btn{display:inline-block;margin-top:10px;padding:10px 14px;background:var(--accent);color:#042027;border-radius:8px;text-decoration:none;font-weight:600}
+.description{margin-top:18px;background:var(--glass);padding:14px;border-radius:8px;border:1px solid rgba(255,255,255,0.02)}
+.description h3{margin-top:10px}
+.description ul{margin:6px 0 0;padding-left:20px}
+.description li{margin:6px 0}
+.note{color:var(--muted);font-size:13px}
+.site-footer{padding:16px 0;text-align:center;color:var(--muted);margin-top:18px}
+@media (max-width:520px){.container{padding:14px}.site-header{padding:14px}.title-wrap h1{font-size:20px}.logo{height:40px}}
+
+/* Animations and micro-interactions */
+@keyframes fadeInUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+@keyframes floaty { 0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)} }
+
+.fade-in { animation: fadeInUp 560ms cubic-bezier(.2,.9,.3,1) both; }
+.logo { animation: floaty 3.6s ease-in-out infinite; }
+.card { transition: transform 220ms ease, box-shadow 220ms ease; }
+.card:hover { transform: translateY(-6px); box-shadow: 0 18px 36px rgba(2,6,23,0.75); }
+.btn { transition: transform 160ms ease, box-shadow 160ms ease; position:relative; overflow:hidden; }
+.btn:active { transform: translateY(1px) scale(0.995); }
+
+/* Toast */
+.toast{position:fixed;right:18px;bottom:18px;background:#042027;color:#c9f8fb;padding:10px 14px;border-radius:8px;box-shadow:0 6px 18px rgba(2,6,23,0.6);z-index:1000;opacity:0;transform:translateY(6px)}
+.toast-fade{animation: fadeInUp 420ms cubic-bezier(.2,.9,.3,1) both}
+
+/* Accent pulse for CTA */
+.btn::after{content:'';position:absolute;inset:0;border-radius:8px;box-shadow:0 0 0 0 rgba(6,182,212,0.16);transition:box-shadow 360ms ease}
+.btn:hover::after{box-shadow:0 10px 40px 8px rgba(6,182,212,0.06)}
+
+/* Page load animations */
+header.site-header, .downloads, .description, .site-footer{opacity:0;transform:translateY(6px);animation:fadeInUp 520ms cubic-bezier(.2,.9,.3,1) both}
+header.site-header{animation-delay:80ms}
+.downloads{animation-delay:140ms}
+.description{animation-delay:220ms}
+.site-footer{animation-delay:300ms}

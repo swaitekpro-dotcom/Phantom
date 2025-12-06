@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Phantom — Загрузки</title>
+  <meta name="theme-color" content="#071014">
+  <!-- Prefer PNG favicon (drop `assets/favicon.png` to use it). Fall back to .ico and .svg -->
+  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+        <div class="logo-wrap">
+          <picture class="logo-picture">
+            <source srcset="assets/logo.png" type="image/png">
+            <img id="site-logo" src="assets/logo.svg" alt="Phantom logo" class="logo" />
+          </picture>
+        </div>
+      <div class="title-wrap">
+        <h1>Phantom</h1>
+        <p class="tagline">Phantom — твоё личное ускорение и доступ без границ</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="downloads">
+      <h2>Скачать</h2>
+      <div class="grid single">
+        <div class="card">
+          <h3>Windows</h3>
+          <p>Инсталлятор для Windows (x64)</p>
+          <a class="btn" href="https://drive.google.com/uc?export=download&id=1DBbCFcITR8eo6xLh21XCz0kC-HclJfmG" target="_blank" rel="noopener noreferrer">Скачать для Windows</a>
+        </div>
+      </div>
+
+      <div class="description">
+        <p>Phantom — это мощный мини-клиент, работающий по принципу zapret и умного DNS. Он стабильно пробивает блокировки и ускоряет доступ к сервисам, которые вечно «думают» или не загружаются.</p>
+
+        <h3>Что умеет Phantom:</h3>
+        <ul>
+          <li>YouTube — мгновенная загрузка, отсутствие лагов и вечного «крутящегося круга».</li>
+          <li>Discord — авторизация, звонки и сервера работают без потерь и обрывов.</li>
+          <li>Roblox — стабильный коннект, без ошибок и задержек.</li>
+          <li>Работает аккуратно в фоне, не нагружает систему и не требует сложных настроек.</li>
+        </ul>
+
+        <h3>Почему Phantom?</h3>
+        <ul>
+          <li>Стильно, просто, эффективно.</li>
+          <li>Максимальная скорость благодаря оптимизированным DNS-правилам.</li>
+          <li>Безопасно: никаких лишних доступов, всё происходит локально на устройстве.</li>
+        </ul>
+
+        <p>Установил → включил → забыл о проблемах. Phantom делает своё дело тихо, быстро и красиво.</p>
+      </div>
+    </section>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden>Скачивание началось…</div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© Phantom — Загрузки.</small>
+    </div>
+  </footer>
+
+  <script>
+    // Небольшая UX-улучшайзинг: анимация кнопки и toast при клике
+    (function(){
+      const btn = document.querySelector('.btn');
+      const toast = document.getElementById('toast');
+      if(!btn) return;
+      btn.addEventListener('click', function(e){
+        // show visual feedback; actual скачивание начнётся по атрибуту download
+        toast.hidden = false;
+        toast.classList.remove('toast-fade');
+        void toast.offsetWidth; // reflow
+        toast.classList.add('toast-fade');
+        setTimeout(()=>{ toast.hidden = true; }, 2200);
+      });
+    })();
+    // Logo cache-busting and PNG fallback: attempts to load PNG, falls back to SVG on error
+    (function(){
+      const logo = document.getElementById('site-logo');
+      if(!logo) return;
+      const ts = Date.now();
+      // try to load PNG first by setting src to PNG with cache-bust query
+      const pngUrl = 'assets/logo.png?v=' + ts;
+      logo.onerror = function(){
+        // if PNG fails, fall back to SVG without cache-bust
+        if(logo.src.indexOf('logo.svg') === -1) logo.src = 'assets/logo.svg?v=' + ts;
+      };
+      // If the <picture> supports source, the browser will pick PNG automatically when available.
+      // For browsers that don't honor it, force a PNG load via creating Image to test availability.
+      const test = new Image();
+      test.onload = function(){ logo.src = pngUrl; };
+      test.onerror = function(){ logo.src = 'assets/logo.svg?v=' + ts; };
+      test.src = pngUrl;
+    })();
+    // Favicon: append cache-busting query and prefer favicon.png if present
+    (function(){
+      const ts = Date.now();
+      // Update all favicon links to add ?v=TIMESTAMP so browsers refetch when you replace file
+      const links = Array.from(document.querySelectorAll('link[rel~="icon"]'));
+      links.forEach(link => {
+        try{
+          const href = link.getAttribute('href') || '';
+          // prefer PNG if a png exists at same path; we attempted to add png in head
+          if(href.indexOf('?') === -1) link.setAttribute('href', href + '?v=' + ts);
+          else link.setAttribute('href', href.replace(/([?]).*$/, '') + '?v=' + ts);
+        }catch(e){}
+      });
+    })();
+  </script>
+</body>
+</html>
